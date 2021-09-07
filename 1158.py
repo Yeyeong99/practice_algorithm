@@ -4,12 +4,11 @@ num_list = [i for i in range(1, n+1)]
 answer_list = []
 
 a = k-1
-while len(num_list) != 0:
-    n_list = num_list[:a]
-    answer_list.append(num_list[a])
-    del num_list[a]
-    a += len(n_list)
-    if a > len(num_list):
-        a -= 
+while len(num_list):
+    if a >= len(num_list):
+        a -= len(num_list)
+    else:
+        answer_list.append(str(num_list.pop(a)))
+        a += (k-1)
 
-    print(answer_list)
+print("<",",".join(answer_list),">", sep="")
