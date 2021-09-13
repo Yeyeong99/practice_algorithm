@@ -1,18 +1,17 @@
+#입력된 수의 인덱스의 값을 1씩 더해줌, 그리고 수가 바뀐 인덱스를 순서대로 1이 더해진 만큼 출력
+
 import sys
 
 n = int(sys.stdin.readline().rstrip())
 
-sorting_array = []
+sorting_array = [0] * 10001
+
 for i in range(n):
-    num = int(sys.stdin.readline().rstrip())
-    sorting_array.append(num)
+    input_num = int(sys.stdin.readline())
 
-for j in range(len(sorting_array)):
-    key = sorting_array[j]
-    target_key = j - 1
-    while target_key >= 0 and key < sorting_array[target_key]:
-        sorting_array[target_key], sorting_array[target_key+1] = sorting_array[target_key+1], sorting_array[target_key]
-        target_key -=1
+    sorting_array[input_num] += 1
 
-for k in sorting_array:
-    print(k)
+for i in range(len(sorting_array)):
+    if sorting_array[i] != 0:
+        for j in range(sorting_array[i]):
+            print(i) #인덱스를 출력
