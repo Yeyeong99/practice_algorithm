@@ -1,19 +1,46 @@
+def find_maximum_subarray(_list, low, high):
+    if low == high - 1:
+        return low, high, _list[low]
+    else:
+        mid = (low + high)//2
+        left_low, left_high, left_max = find_maximum_subarray(_list, low, mid)
+        right_low, right_high, right_max = find_maximum_subarray(_list, mid, high)
+        cross_low, cross_high, cross_max = find_maximum_crossing_subarray(_list, low, mid, high)
+        if (left_max > right_max and left_max > cross_max):
+            return left_low, left_high, left_max
+        elif (right_max > left_max and right_max > cross_max):
+            return right_low, right_high, right_max
+        else:
+            return cross_low, cross_high, cross_max
+ 
+def find_maximum_crossing_subarray(_list, low, mid, high):
+    left_sum = float('-inf')
+    _sum = 0
+    cross_low = mid
+    for i in range(mid - 1, low - 1, -1):
+        _sum = _sum + _list[i]
+        if _sum > left_sum:
+            left_sum = _sum
+            cross_low = i
+ 
+    right_sum = float('-inf')
+    _sum = 0
+    cross_high = mid + 1
+    for i in range(mid, high):
+        _sum = _sum + _list[i]
+        if _sum > right_sum:
+            right_sum = _sum
+            cross_high = i
+    return cross_low, cross_high, left_sum + right_sum
 
-_list = [3, -1, 6, -5, -10]
-mid = len(_list) // 2
-left = _list[:mid]
-right = _list[mid:]
 
-left_sum = float('-inf')
-left_total = 0
-cross_mid = len(_list) // 2
-cross_left = _list[:cross_mid]
+n = int(input())
 
-for i in range(len(cross_left)-1, -1, -1):
-    print(f"i: {i}")
-    left_total = left_total + cross_left[i]
-    if left_total > left_sum:
-        left_sum = left_total
-        max_left = i
+num_list = []
+for i in range(n):
+    num_list.append(int(input()))
 
-print(left, right)
+result = find_maximum_subarray(num_list, 0, len(num_list))
+
+for i in result:
+    print(i)
