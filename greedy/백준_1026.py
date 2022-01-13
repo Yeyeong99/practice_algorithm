@@ -18,3 +18,16 @@ for x, y in zip(sorted(a, reverse=True), sorted(b)):
 
 print(result)
 
+# b 재정렬 안하고
+n = int(input())
+
+a = list(map(int, input().split()))
+b = list(map(int, input().split()))
+
+result = 0
+
+for i in sorted(a):
+  result += i*b.pop(b.index(max(b)))
+
+print(result)
+
