@@ -41,7 +41,9 @@
       return not bool(self.head)
 
     def push(self, item):
-      self.head = Node(item, self.head) # value = item, pointer = self.head
+      self.head = Node(item, self.head) 
+      # 새로 들어온 item이 head가 되고, 새로 들어온 item의 pointer는 기존의 head를 가리키게 되는 것. 
+      # value = item, pointer = self.head
       self.count += 1
 
     def pop(self):
