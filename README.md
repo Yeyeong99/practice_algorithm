@@ -2,7 +2,7 @@
 
 |주언어|파이썬|
 |:-:|:-|
-|참고자료|- 이것이 취업을 위한 코딩 테스트다 with 파이썬<BR>- 파이썬 자료구조와 알고리즘: 기초 튼튼, 핵심 쏙쏙, 실력 쑥쑥|
+|참고자료|- 이것이 취업을 위한 코딩 테스트다 with 파이썬<BR>- 파이썬 자료구조와 알고리즘: 기초 튼튼, 핵심 쏙쏙, 실력 쑥쑥<br>Do it! 자료구조와 함께 배우는 알고리즘 입문: 파이썬 |
 |참고 사이트|- 백준<br>- 코드업<br>- 프로그래머스|
 #
 ## 정리
@@ -72,6 +72,55 @@
         print()
   ```
   - 깊이 우선 탐색에서 유용하게 쓰임
+3. collections.deque를 사용해 고정 길이 스택 클래스 구현
+  ```python
+  from typing import Any
+  from collections import deque
+  
+  class Stack:
+    """고정 길이 스택 클래스(collections.deque 활용"""
+
+    def __init__(self, maxlen: int = 256) -> None:
+      self.capacity = maxlen
+      self.__stk = deque([], maxlen)
+
+    def __len__(self) -> int:
+      #스택에 쌓여있는 데이터 개수를 반환
+      return len(self.__stk)
+
+    def is_empty(self) -> bool:
+      return not self.__stk
+
+    def is_full(self) -> bool:
+      return eln(self.__stk) == self.__stk.maxlen
+
+    def push(self, value: Any) -> None:
+      self.__stk.append(value)
+
+    def pop(self) -> Any:
+      return self.__stk.pop()
+
+    def peek(self) -> Any:
+      return self.__stk[-1]
+
+    def clear(self) -> None:
+      self.__stk.clear()
+
+    def find(self, value: Any) -> Any:
+      try:
+        return self.__stk.index(value)
+      except ValueError:
+        return -1
+
+    def count(clear, value: Any) -> int:
+      return self.__stk.count(value)
+
+    def __contains_(self, value: Any) -> bool:
+      return self.count(value)
+
+    def dump(self) -> int:
+      print(list(self.__stk))
+   ```
 
 ## 큐
 들어온 순서대로 접근이 가능한 자료구조
@@ -82,3 +131,41 @@
   - peek/front: 큐 앞쪽의 항목을 조회한다.
   - empty: 큐가 비어있는지 확인
   - size: 큐의 크기 확인
+  
+> 링 버퍼ring buffer: 배열의 맨 끝 원소(rear) 뒤에 맨 앞의 원소(front)가 연결되는 자료 구조 
+  
+2. 시간 복잡도가 O(n)인 경우 (insert를 사용해 모든 요소가 메모리 상에서 이동할 가능성이 있기 때문)
+```python
+  class Queue(object):
+    def __init__(self):
+      self. items = []
+  
+  def isEmpty(self):
+    return not bool(self.items)
+  
+  # 0 번째가 뒤, 반대가 앞
+  def enqueue(self, item):
+    self.items.insert(0, item)
+  
+  def dequeue(self):
+    value = self.items.pop()
+    if value is not None:
+      return value
+    else:
+      return -1
+  
+  def size(self):
+    return len(self.items)
+  
+  def peek(self):
+    if self.items:
+      return self.items[-1]
+    else:
+      return -1
+  
+  def __repr__(self):
+    return repr(self.items)
+  
+```python
+
+3. 스택 두 개 활용
