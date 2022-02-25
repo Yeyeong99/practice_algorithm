@@ -1,17 +1,23 @@
 # practice_algorithm
 
+
+## 1. 참고자료
 |주언어|파이썬|
 |:-:|:-|
 |참고자료|- 이것이 취업을 위한 코딩 테스트다 with 파이썬<BR>- 파이썬 자료구조와 알고리즘: 기초 튼튼, 핵심 쏙쏙, 실력 쑥쑥<br>Do it! 자료구조와 함께 배우는 알고리즘 입문: 파이썬 |
 |참고 사이트|- 백준<br>- 코드업<br>- 프로그래머스|
 #
-## 정리
-|자료구조|구조|시간복잡도|의미|
-|:-:|:-:|:-:|:-:|
-|스택|LIFO|O(1)|배열의 끝에서만 데이터에 접근할 수 있는 선형 자료구조|
-|큐|FIFO|O(1)|들어온 순서대로 접근이 가능한 자료구조|  
+## 2. 정리
   
-## 스택
+|자료구조|시간복잡도|설명|
+|:-:|:-:|:-|
+|스택|O(1)|LIFO, 배열의 끝에서만 데이터에 접근할 수 있는 선형 자료구조|
+|큐|O(1)|FIFO, 들어온 순서대로 접근이 가능한 자료구조|
+|힙|O(1)/O(log n)|각 노드가 하위 노드보다 작은(큰) 이진 트리|
+|해시|O(1)/O(n)|해시 함수를 통해 키, 값이 매핑됨. 해시 충돌이 일어날 경우 연결 리스트로 해결|
+
+## 3. 자료구조
+### 스택
 배열의 끝에서만 데이터에 접근할 수 있는 선형 자료구조
 1. 스택의 동작 - 모두 O(1)
   - push: 스택의 맨 끝에 항목을 삽입함
@@ -122,7 +128,7 @@
       print(list(self.__stk))
    ```
 
-## 큐
+### 큐
 들어온 순서대로 접근이 가능한 자료구조
 배열의 인덱스 접근이 제한 됨
 1. 동작 - 시간복잡도는 모두 O(1)
@@ -140,32 +146,115 @@
     def __init__(self):
       self. items = []
   
-  def isEmpty(self):
-    return not bool(self.items)
+    def isEmpty(self):
+      return not bool(self.items)
+
+    # 0 번째가 rear(데이터를 넣는 쪽), 반대가 front(데이터를 꺼내는 쪽)
+    def enqueue(self, item):
+      self.items.insert(0, item)
+
+    def dequeue(self):
+      value = self.items.pop()
+      if value is not None:
+        return value
+      else:
+        return -1
+
+    def size(self):
+      return len(self.items)
+
+    def peek(self):
+      if self.items:
+        return self.items[-1]
+      else:
+        return -1
+
+    def __repr__(self):
+      return repr(self.items)
   
-  # 0 번째가 뒤, 반대가 앞
-  def enqueue(self, item):
-    self.items.insert(0, item)
-  
-  def dequeue(self):
-    value = self.items.pop()
-    if value is not None:
-      return value
-    else:
-      return -1
-  
-  def size(self):
-    return len(self.items)
-  
-  def peek(self):
-    if self.items:
-      return self.items[-1]
-    else:
-      return -1
-  
-  def __repr__(self):
-    return repr(self.items)
-  
-```python
+```
 
 3. 스택 두 개 활용
+  - enqueue: inbox에 요소를 넣음. 이때 append 활용
+  - dequeue
+    - outbox에서 요소를 뺌.
+      - 이때 outbox에 요소가 없으면 inbox에 있던 걸 pop해서 옮겨줌
+        - 따라서 inbox에 들어있는 요소와 outbox에 들어있는 요소는 순서가 반대임(inbox가 위에서부터 1, 2, 3이라고 하면 outbox는 위에서부터 3, 2, 1)
+      - 요소가 있으면 pop을 이용해 반환, 제거
+      
+```python
+  class Queue(object):
+    def __init__(self):
+      self.in_stack = []
+      self.out_stack = []
+    
+    def _transfer(self):
+      while self.in_stack:
+        self.out_stack.append(self.in_stack.pop())
+    
+    def enqueue(self, item):
+      return self.in_stack.append(item)
+    
+    def dequeue(self):
+      if not self.out_stack:
+        self._transfer()
+      if self.out_stack:
+        return self.out_stack.pop()
+      else:
+        return -1
+    
+    def size(self):
+      return len(self.in_stack) + len(self.out_stack)
+    
+    def peek(self):
+      if not self.out_stack:
+        self._transfer()
+      if self.out_stack:
+        return self.out_stack[-1]
+      else:
+        return -1
+  
+    def __repr__(self):
+      if not self.out_stack:
+        self._transfer()
+      if self.out_stack:
+        return repr(self.out_stack)
+      else:
+        return -1
+  
+    def isEmpty(self):
+      return not (bool(self.in_stack) or bool(self.out_stack))
+```
+### 데크
+스택과 큐의 결합체
+- 양쪽 끝에서 항목의 조회, 삽입, 삭제 가능
+- collections의 deque 모듈을 이용해 효율적으로 구현 가능
+  - deque의 rotate(n): 음수면 왼쪽으로, 양수면 오른쪽으로 n만큼 shift
+  
+### 우선순위 큐
+각 항목마다 우선순위 존재, 두 항목의 우선순위가 같을 경우 큐의 순서를 따름
+- 힙을 이용해 구현
+  
+#### 힙
+각 노드가 하위 노드보다 작은 이진 트리
+- 리스트에서 가장 작은 요소에 반복적해서 접근하는 프로그램에 유용함
+- 가장 작은 / 큰 요소를 처리하는 시간복잡도는 O(1)
+- 추가, 조회, 수정을 처리하는 시간복잡도는 O(log n)
+  
+#### heapq 모듈
+- heapq.heapify(list): O(n) 시간에 리스트를 힙으로 변환 가능
+
+### 연결 리스트
+값과 다음 노드에 대한 포인터가 포함된 노드로 이뤄진 선형 리스트
+  
+### 해시 테이블
+1. 키를 값에 연결, 하나의 키가 0-1개의 값과 연관됨
+- 해시 함수 필요
+- 해시 버킷의 배열로 구성: 두 개의 키가 동일한 버킷에 해시될 경우 해시 충돌(hash collision)이 발생할 수 있음
+
+2. 해시 충돌 해결 방법
+- 각 버킷에 연결 리스트를 저장
+
+3. 시간복잡도
+- 조회, 삽입, 삭제: O(1)
+- 충돌이 발생할 경우: O(n)
