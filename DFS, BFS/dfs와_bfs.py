@@ -7,21 +7,51 @@ Original file is located at
     https://colab.research.google.com/drive/1YRohOojL-MEo1zTQdc4qZdypYSfj-pL6
 """
 
+# https://www.acmicpc.net/problem/1260
 n, m, v = map(int, input().split())
 
-graph = [[] for i in range(n)]
+# index가 0부터 시작하기 때문에 n+1개까지
+graph = [[] for i in range(n+1)]
 
+# 1 - 2 / 2 - 1 모두 저장해줌
 for i in range(m):
-  node, next = map(int, input().split())
-  graph[node].append(next)
+  node1, node2 = map(int, input().split())
+  graph[node1].append(node2)
+  graph[node2].append(node1)
+
+graph = list(map(lambda x: sorted(x), graph))
+print(graph)
 
 def dfs(graph, v, visited):
   visited[v] = True
-  print(v, end='')
+  print(v, end=' ')
   for j in graph[v]:
     if not visited[j]:
-      dfs(graph, i, visited)
+      dfs(graph, j, visited)
 
-visited = [False] * (n+1)
+from collections import deque
+def bfs(graph, v, visited):
+  # bfs는 queue에서 인덱스를 뽑아서 사용
+  # 그렇기 때문에 start를 queue를 생성하며 먼저 삽입
+  queue = deque([v])
+  visited[v] = True
+  while queue:
+    v = queue.popleft()
+    print(v, end=' ')
 
-dfs(graph, v, visited)
+    for i in graph[v]:
+      if not visited[i]:
+        queue.append(i)
+        visited[i] = True
+
+
+# 함수를 따로 출력하면 오류
+# 출력형식에 맞게 하기 위해 함수 따로 선언
+def dfs_bfs(graph, v):
+  visited = [False] * (n+1)
+  dfs(graph, v, visited)
+  print()
+  visited = [False] * (n+1)
+  bfs(graph, v, visited)
+
+dfs_bfs(graph, v)
