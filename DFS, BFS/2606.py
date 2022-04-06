@@ -10,6 +10,7 @@ for pair in range(pairs):
 
 graphs = list(map(lambda x: sorted(x), graphs))
 
+# bfs 로 풀기
 from collections import deque
 
 def bfs(sequence, visited):
@@ -29,3 +30,14 @@ def bfs(sequence, visited):
 
 visited = [False] * (n+1)
 print(bfs(graphs, visited))
+
+# dfs로 풀기
+def dfs(seq, v, visited):
+  visited[v] = True
+  for i in seq[v]:
+    if not visited[i]:
+      dfs(seq, i, visited)
+
+visited = [False] * (n+1)
+dfs(graphs, 1, visited)
+print(visited.count(True)-1)
