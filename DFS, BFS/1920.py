@@ -43,3 +43,16 @@ def binary(array, num, start, end):
 
 for i in m_nums:
     print(binary(n_nums, i, 0, n-1))
+
+# 통과
+def binary_search(array, target, start, end):
+  if start > end:
+    return 0
+  mid = (start + end) // 2
+
+  if array[mid] == target:
+    return 1
+  elif array[mid] > target:
+    return binary_search(array, target, start, mid-1)
+  else: 
+    return binary_search(array, target, mid+1, end)
