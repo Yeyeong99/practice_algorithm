@@ -10,7 +10,16 @@ print(round(sum(nums)/n))
 print(sorted(nums)[n//2])
 c_nums = dict(Counter(nums))
 
-for i in c_nums:
-  if cmax(c_nums.values())
+freqs = []
+for i in c_nums.keys():
+  if c_nums[i] == max(c_nums.values()):
+    freqs.append(i)
+
+freqs.sort()
+if len(freqs) == 1:
+  print(freqs[0])
+else:
+  print(freqs[1])
+  
 
 print(sorted(nums)[-1]-sorted(nums)[0])
